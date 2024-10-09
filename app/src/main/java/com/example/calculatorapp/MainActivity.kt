@@ -576,7 +576,8 @@ fun ButtonsRow5(viewText: String, sums: String, author: String,
                     var scriptable = context.initStandardObjects();
                     var result = context.evaluateString(scriptable,viewText,"Javascript",
                         1,null).toString();
-                    System.out.println("This is the result: $result");
+                    // Truncates the result to 12 digits to fit the Summation Box
+                    result = truncateString(result,12)
                     sumTextOnChange(result);
                 }
                 // Does nothing except log the error
@@ -596,6 +597,17 @@ fun ButtonsRow5(viewText: String, sums: String, author: String,
             )
         }
     }
+}
+
+/**
+ * This is the truncate string function
+ * This is needed to ensure the view box does not overflow
+ * @param text This is string to truncate
+ * @param length This is length to truncate string to
+ * @return substring string of the original text
+ */
+fun truncateString(text: String, length: Int): String {
+    return text.substring(0,length)
 }
 
 /**
