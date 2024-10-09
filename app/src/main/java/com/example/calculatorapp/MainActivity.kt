@@ -45,7 +45,16 @@ import org.mozilla.javascript.Context
 import org.mozilla.javascript.ContextFactory
 import org.mozilla.javascript.Scriptable
 
+/**
+ * This is the main activity class that drives the UI
+ * extends the ComponentActivity
+ */
 class MainActivity : ComponentActivity() {
+    /**
+     * Override the onCreate function
+     * @param savedInstanceState This is an instance of Bundle
+     * that can be empty
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -62,8 +71,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * This is the Main Calculator composable
+ * @param style This is the style of calculator to present
+ * @param modifier This is a Modifier object to pass along
+ */
 @Composable
 fun Calculator(style: String, modifier: Modifier = Modifier) {
+    // Layout Constraint for placement handling
     ConstraintLayout {
         // Create references for the composables to constrain
         val (viewBox, buttonBox) = createRefs()
@@ -75,6 +90,7 @@ fun Calculator(style: String, modifier: Modifier = Modifier) {
         var sumText by rememberSaveable { mutableStateOf(author) }
         // This is the view box
         Column(
+            // Constraint to top of button box
             modifier = Modifier
                 .constrainAs(viewBox) {
                     bottom.linkTo(buttonBox.top, margin = 16.dp)
@@ -87,9 +103,9 @@ fun Calculator(style: String, modifier: Modifier = Modifier) {
             SummationBox(sumText);
         }
 
-        // Assign reference "text" to the Text composable
-        // and constrain it to the bottom of the viewBox composable
+        // This is the calculator buttons box
         Column(
+            // Constraint to bottom of the parent
             modifier = Modifier
                 .constrainAs(buttonBox) {
                     bottom.linkTo(parent.bottom, margin = 16.dp)
@@ -116,6 +132,10 @@ fun Calculator(style: String, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * This is the View Box composable
+ * @param values This is the value string to render
+ */
 @Composable
 fun ViewBox(values: String) {
     Text(
@@ -128,6 +148,10 @@ fun ViewBox(values: String) {
     )
 }
 
+/**
+ * This is the Summation Box composable
+ * @param values This is the value string to render
+ */
 @Composable
 fun SummationBox(values: String) {
     Text(
@@ -140,12 +164,20 @@ fun SummationBox(values: String) {
     )
 }
 
+/**
+ * This is the Row 1 Buttons composable
+ * @param viewText This is the current value of the view Text
+ * @param author This is the current value of the author
+ * @param viewTextOnChange This is the callback function that updates view Text
+ * @param viewTextOnChange This is the callback function that updates view Text
+ */
 @Composable
-fun ButtonsRow1(views: String, author: String, viewTextOnChange: ((String) -> Unit) = {}) {
+fun ButtonsRow1(viewText: String, author: String, viewTextOnChange: ((String) -> Unit) = {}) {
     // First row of buttons
     Row() {
         FloatingActionButton(
-            onClick = { viewTextOnChange("${views.subSequence(0,views.length-1)}");},
+            // Updates the viewText with a substring of one less of length
+            onClick = { viewTextOnChange("${viewText.subSequence(0,viewText.length-1)}");},
             shape = RoundedCornerShape(50),
 
             modifier = Modifier.padding(16.dp),
@@ -160,8 +192,9 @@ fun ButtonsRow1(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"(");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"(");
                 else viewTextOnChange("(");
             },
             shape = RoundedCornerShape(50),
@@ -177,8 +210,9 @@ fun ButtonsRow1(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+")");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+")");
                 else viewTextOnChange(")");
             },
             shape = RoundedCornerShape(50),
@@ -194,8 +228,9 @@ fun ButtonsRow1(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"/");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"/");
                 else viewTextOnChange("/");
             },
             shape = RoundedCornerShape(50),
@@ -212,12 +247,19 @@ fun ButtonsRow1(views: String, author: String, viewTextOnChange: ((String) -> Un
     }
 }
 
+/**
+ * This is the Row 2 Buttons composable
+ * @param viewText This is the current value of the view Text
+ * @param author This is the current value of the author
+ * @param viewTextOnChange This is the callback function that updates view Text
+ */
 @Composable
-fun ButtonsRow2(views: String, author: String, viewTextOnChange: ((String) -> Unit) = {}) {
+fun ButtonsRow2(viewText: String, author: String, viewTextOnChange: ((String) -> Unit) = {}) {
     Row() {
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"7");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"7");
                 else viewTextOnChange("7");
             },
             shape = RoundedCornerShape(50),
@@ -233,8 +275,9 @@ fun ButtonsRow2(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"8");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"8");
                 else viewTextOnChange("8");
             },
             shape = RoundedCornerShape(50),
@@ -250,8 +293,9 @@ fun ButtonsRow2(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"9");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"9");
                 else viewTextOnChange("9");
             },
             shape = RoundedCornerShape(50),
@@ -267,8 +311,9 @@ fun ButtonsRow2(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"*");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"*");
                 else viewTextOnChange("*");
             },
             shape = RoundedCornerShape(50),
@@ -285,12 +330,19 @@ fun ButtonsRow2(views: String, author: String, viewTextOnChange: ((String) -> Un
     }
 }
 
+/**
+ * This is the Row 3 Buttons composable
+ * @param viewText This is the current value of the view Text
+ * @param author This is the current value of the author
+ * @param viewTextOnChange This is the callback function that updates view Text
+ */
 @Composable
-fun ButtonsRow3(views: String, author: String, viewTextOnChange: ((String) -> Unit) = {}) {
+fun ButtonsRow3(viewText: String, author: String, viewTextOnChange: ((String) -> Unit) = {}) {
     Row() {
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"4");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"4");
                 else viewTextOnChange("4");
             },
             shape = RoundedCornerShape(50),
@@ -306,8 +358,9 @@ fun ButtonsRow3(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"5");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"5");
                 else viewTextOnChange("5");
             },
             shape = RoundedCornerShape(50),
@@ -323,8 +376,9 @@ fun ButtonsRow3(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"6");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"6");
                 else viewTextOnChange("6");
             },
             shape = RoundedCornerShape(50),
@@ -340,8 +394,9 @@ fun ButtonsRow3(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"+");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"+");
                 else viewTextOnChange("+");
             },
             shape = RoundedCornerShape(50),
@@ -358,12 +413,19 @@ fun ButtonsRow3(views: String, author: String, viewTextOnChange: ((String) -> Un
     }
 }
 
+/**
+ * This is the Row 4 Buttons composable
+ * @param viewText This is the current value of the view Text
+ * @param author This is the current value of the author
+ * @param viewTextOnChange This is the callback function that updates view Text
+ */
 @Composable
-fun ButtonsRow4(views: String, author: String, viewTextOnChange: ((String) -> Unit) = {}) {
+fun ButtonsRow4(viewText: String, author: String, viewTextOnChange: ((String) -> Unit) = {}) {
     Row() {
         FloatingActionButton(
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"1");
+                // Updates the viewText depending on initial values; otherwise it appends
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"1");
                 else viewTextOnChange("1");
             },
             shape = RoundedCornerShape(50),
@@ -379,8 +441,9 @@ fun ButtonsRow4(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"2");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"2");
                 else viewTextOnChange("2");
             },
             shape = RoundedCornerShape(50),
@@ -396,8 +459,9 @@ fun ButtonsRow4(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"3");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"3");
                 else viewTextOnChange("3");
             },
             shape = RoundedCornerShape(50),
@@ -413,8 +477,9 @@ fun ButtonsRow4(views: String, author: String, viewTextOnChange: ((String) -> Un
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+"-");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+"-");
                 else viewTextOnChange("-");
             },
             shape = RoundedCornerShape(50),
@@ -431,14 +496,22 @@ fun ButtonsRow4(views: String, author: String, viewTextOnChange: ((String) -> Un
     }
 }
 
+/**
+ * This is the Row 5 Buttons composable
+ * @param viewText This is the current value of the view Text
+ * @param author This is the current value of the author
+ * @param viewTextOnChange This is the callback function that updates view Text
+ * @param sumTextOnChange This is the callback function that updates sum Text
+ */
 @Composable
-fun ButtonsRow5(views: String, sums: String, author: String,
+fun ButtonsRow5(viewText: String, sums: String, author: String,
                 viewTextOnChange: ((String) -> Unit) = {},
                 sumTextOnChange: ((String) -> Unit) = {})
 {
     Row() {
         // This is the AC button
         FloatingActionButton(
+            // Updates the viewText and sumText to be 0
             onClick = {
                 viewTextOnChange("0");
                 sumTextOnChange("0");
@@ -459,8 +532,9 @@ fun ButtonsRow5(views: String, sums: String, author: String,
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") { viewTextOnChange("$views"+"0"); }
+                if (viewText != author && viewText != "0") { viewTextOnChange("$viewText"+"0"); }
                       },
             shape = RoundedCornerShape(50),
             modifier = Modifier.padding(16.dp),
@@ -475,8 +549,9 @@ fun ButtonsRow5(views: String, sums: String, author: String,
         }
 
         FloatingActionButton(
+            // Updates the viewText depending on initial values; otherwise it appends
             onClick = {
-                if (views != author && views != "0") viewTextOnChange("$views"+".");
+                if (viewText != author && viewText != "0") viewTextOnChange("$viewText"+".");
                 else viewTextOnChange(".");
             },
             shape = RoundedCornerShape(50),
@@ -492,13 +567,14 @@ fun ButtonsRow5(views: String, sums: String, author: String,
         }
         // This is the equals or evaluate button
         FloatingActionButton(
+            // Evaluates the viewText and renders it in the sumText
             onClick = {
                 try {
                     // Setup the context for the evaluation
                     var context = Context.enter();
                     context.optimizationLevel = -1;
                     var scriptable = context.initStandardObjects();
-                    var result = context.evaluateString(scriptable,views,"Javascript",
+                    var result = context.evaluateString(scriptable,viewText,"Javascript",
                         1,null).toString();
                     System.out.println("This is the result: $result");
                     sumTextOnChange(result);
@@ -522,11 +598,16 @@ fun ButtonsRow5(views: String, sums: String, author: String,
     }
 }
 
-// Main Preview function, which is just a wrapper for the main function
+/**
+ * This is the Main preview function composable
+ * This is what loads when live-preview is enabled
+ * @param showBackground This is set to true for default background color
+ */
 @Preview(showBackground = true)
 @Composable
 fun CalculatorPreview() {
     CalculatorAppTheme {
+        // Only the default style is implemented currently
         Calculator("standard")
     }
 }
