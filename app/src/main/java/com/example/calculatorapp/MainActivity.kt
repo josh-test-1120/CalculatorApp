@@ -578,6 +578,7 @@ fun ButtonsRow5(viewText: String, sums: String, author: String,
                         1,null).toString();
                     // Truncates the result to 12 digits to fit the Summation Box
                     result = truncateString(result,12)
+                    System.out.println("This is the result: $result")
                     sumTextOnChange(result);
                 }
                 // Does nothing except log the error
@@ -607,7 +608,8 @@ fun ButtonsRow5(viewText: String, sums: String, author: String,
  * @return substring string of the original text
  */
 fun truncateString(text: String, length: Int): String {
-    return text.substring(0,length)
+    if (text.length > length) return text.substring(0,length)
+    else return text
 }
 
 /**
